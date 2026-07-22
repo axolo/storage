@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "test": "node test/storage.test.js"
+    "test": "node --test"
   },
   "devDependencies": {
     "@typescript/typescript6": "^6.0.2",
