@@ -1,0 +1,42 @@
+{
+  "name": "@axolo/storage",
+  "version": "0.1.0",
+  "description": "JavaScript Storage with prefix and codec.",
+  "license": "MIT",
+  "author": "axolo",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "module": "dist/storage.es.js",
+  "main": "dist/storage.umd.js",
+  "types": "dist/storage.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/storage.es.js",
+      "require": "./dist/storage.umd.js",
+      "types": "./dist/storage.d.ts"
+    }
+  },
+  "keywords": [
+    "storage",
+    "localStorage",
+    "sessionStorage"
+  ],
+  "homepage": "https://github.com/axolo/storage#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axolo/storage.git"
+  },
+  "scripts": {
+    "build": "vite build",
+    "test": "node test/storage.test.js"
+  },
+  "devDependencies": {
+    "@typescript/typescript6": "^6.0.2",
+    "terser": "^5.49.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vite-plugin-dts": "^5.0.3"
+  }
+}
