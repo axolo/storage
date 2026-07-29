@@ -1,20 +1,20 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
-import AxoloStorage from '../dist/storage.es.js';
+import ScopedStorage from '../dist/storage.es.js';
 import MemoryStorage from './lib/memory-storage.js';
 
 describe('_getKey', () => {
   it('前缀拼接', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('test:', engine);
+    const store = new ScopedStorage('test:', engine);
     assert.equal(store._getKey('a'), 'test:a');
     assert.equal(store._getKey(''), 'test:');
   });
 
   it('空前缀', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('', engine);
+    const store = new ScopedStorage('', engine);
     assert.equal(store._getKey('a'), 'a');
   });
 });
@@ -22,7 +22,7 @@ describe('_getKey', () => {
 describe('setItem / getItem', () => {
   it('基本类型', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
 
     store.setItem('name', 'axolo');
     assert.equal(store.getItem('name'), 'axolo');
@@ -39,7 +39,7 @@ describe('setItem / getItem', () => {
 
   it('对象与数组', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
 
     const user = { id: 1, name: 'axolo', tags: ['a', 'b'] };
     store.setItem('user', user);
@@ -52,20 +52,20 @@ describe('setItem / getItem', () => {
 
   it('不存在的键返回 null', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
     assert.equal(store.getItem('missing'), null);
   });
 
   it('非 JSON 字符串原值返回', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
     engine.setItem('demo:raw', 'this-is-not-json');
     assert.equal(store.getItem('raw'), 'this-is-not-json');
   });
 
   it('链式调用', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
     const result = store.setItem('a', 1).setItem('b', 2).setItem('c', 3);
     assert.ok(result === store);
     assert.equal(store.getItem('a'), 1);
@@ -77,7 +77,7 @@ describe('setItem / getItem', () => {
 describe('removeItem', () => {
   it('基本删除', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
 
     store.setItem('x', 1);
     assert.equal(store.getItem('x'), 1);
@@ -89,7 +89,7 @@ describe('removeItem', () => {
 
   it('链式调用', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
     store.setItem('a', 1).setItem('b', 2);
     const ret = store.removeItem('a').removeItem('b');
     assert.ok(ret === store);
@@ -100,8 +100,8 @@ describe('removeItem', () => {
 describe('keys', () => {
   it('只包含当前前缀的键', () => {
     const engine = new MemoryStorage();
-    const a = new AxoloStorage('a:', engine);
-    const b = new AxoloStorage('b:', engine);
+    const a = new ScopedStorage('a:', engine);
+    const b = new ScopedStorage('b:', engine);
 
     a.setItem('k1', 1);
     a.setItem('k2', 2);
@@ -115,7 +115,7 @@ describe('keys', () => {
 
   it('engine 混合无关键', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('s:', engine);
+    const store = new ScopedStorage('s:', engine);
     engine.setItem('other', 'x');
     engine.setItem('s:k1', '1');
     store.setItem('k2', 2);
@@ -127,7 +127,7 @@ describe('keys', () => {
 describe('has', () => {
   it('检查键存在性', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
     store.setItem('ok', 1);
     assert.equal(store.has('ok'), true);
     assert.equal(store.has('no'), false);
@@ -137,8 +137,8 @@ describe('has', () => {
 describe('clear', () => {
   it('仅清空当前前缀', () => {
     const engine = new MemoryStorage();
-    const a = new AxoloStorage('a:', engine);
-    const b = new AxoloStorage('b:', engine);
+    const a = new ScopedStorage('a:', engine);
+    const b = new ScopedStorage('b:', engine);
 
     a.setItem('x', 1).setItem('y', 2);
     b.setItem('z', 3);
@@ -154,7 +154,7 @@ describe('clear', () => {
 describe('getSize', () => {
   it('存储内容长度', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('s:', engine);
+    const store = new ScopedStorage('s:', engine);
     assert.equal(store.getSize(), 0);
 
     store.setItem('a', 'hello');
@@ -171,8 +171,8 @@ describe('getSize', () => {
 describe('前缀隔离', () => {
   it('两个实例互不干扰', () => {
     const engine = new MemoryStorage();
-    const s1 = new AxoloStorage('ns1:', engine);
-    const s2 = new AxoloStorage('ns2:', engine);
+    const s1 = new ScopedStorage('ns1:', engine);
+    const s2 = new ScopedStorage('ns2:', engine);
 
     s1.setItem('data', { a: 1 });
     s2.setItem('data', { a: 2 });
@@ -191,7 +191,7 @@ describe('前缀隔离', () => {
 describe('存储 undefined 行为', () => {
   it('undefined 转为字符串存储', () => {
     const engine = new MemoryStorage();
-    const store = new AxoloStorage('demo:', engine);
+    const store = new ScopedStorage('demo:', engine);
     store.setItem('u', undefined);
     const raw = engine.getItem('demo:u');
     assert.equal(raw, 'undefined');

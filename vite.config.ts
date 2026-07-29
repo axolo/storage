@@ -12,7 +12,7 @@ export default {
     minify: 'terser',
     lib: {
       entry: 'src/storage.ts',
-      name: 'AxoloStorage',
+      name: 'ScopedStorage',
       formats: ['es', 'umd'],
       fileName: (format: string) => `storage.${format}.js`
     }

@@ -1,4 +1,4 @@
-# AxoloStorage
+# @axolo/storage
 
 一个支持命名空间前缀和自动编解码的 JavaScript Storage 封装库。
 
@@ -21,10 +21,10 @@ npm i @axolo/storage
 ### 使用
 
 ```javascript
-import AxoloStorage from '@axolo/storage';
+import ScopedStorage from '@axolo/storage';
 
 // 创建带前缀的存储实例
-const store = new AxoloStorage('app:');
+const store = new ScopedStorage('app:');
 
 // 存储数据
 store.setItem('user', { id: 1, name: 'axolo' });
@@ -44,7 +44,7 @@ store.clear();
 
 ## API
 
-### new AxoloStorage(prefix?: string, engine?: Storage)
+### new ScopedStorage(prefix?: string, engine?: Storage)
 
 |   参数   |   类型    |     默认值     |                  说明                   |
 | -------- | --------- | -------------- | --------------------------------------- |

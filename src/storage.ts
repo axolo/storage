@@ -1,4 +1,4 @@
-class AxoloStorage {
+class ScopedStorage {
   private prefix: string;
   private engine: Storage;
 
@@ -74,4 +74,4 @@ class AxoloStorage {
   }
 }
 
-export default AxoloStorage
+export default ScopedStorage
