@@ -1,4 +1,4 @@
-# @axolo/storage
+# ScopedStorage
 
 一个支持命名空间前缀和自动编解码的 JavaScript Storage 封装库。
 
